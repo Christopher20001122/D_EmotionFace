@@ -1,0 +1,13 @@
+<!--Creamos la fuente de transmision para el video-->
+<div>
+    <!--Solo se va a ejecutar si existe un componente de Transmision-->
+
+    <video #elementoVideo
+    (loadedmetadata)="PrecargaCompleta()" 
+    (play)="VideoReproduciendo()"
+    *ngIf="transmision" 
+    autoplay
+    [srcObject]="transmision">
+
+    </video>
+</div>
