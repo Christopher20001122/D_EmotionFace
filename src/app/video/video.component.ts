@@ -59,7 +59,7 @@ export class VideoComponent implements OnInit, OnDestroy {
     //Dibujar el cuadro para reconocer si es un rostro
     global.draw.drawDetections(this.sobreLienzo,redimensionDetec);
     //Dibujar los puntos de referencia
-    global.draw.drawFaceLandmarks(this.sobreLienzo,redimensionDetec);
+    //global.draw.drawFaceLandmarks(this.sobreLienzo,redimensionDetec);
 
   }
 

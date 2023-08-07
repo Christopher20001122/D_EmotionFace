@@ -1,6 +1,7 @@
 import { Component,OnInit, OnDestroy, Renderer2, ElementRef } from '@angular/core';
 import { VideoService } from './video.service';
 import { FaceApiService } from './face-api.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public dimensionVideo : any;
   listaEventos : Array<any> = [];
   sobreLienzo : any;
+  listaExpresiones : any [];
 
   constructor(
     private faceApiService : FaceApiService,
@@ -37,9 +39,25 @@ export class AppComponent implements OnInit, OnDestroy {
       redimensionDetec = redimensionDetec[0]||null;
     //Aqui dibujamos 
     if(redimensionDetec){
+      this.listaExpresiones = _.map(expresiones,(value,name)=>{
+        return {name, value};
+      });
+      //console.log(this.listaExpresiones);   
+      //console.log(expresiones);
+      //capturamos el valor con la expresion más alta
+      let highestEmotion = { name: "", value: 0 };
+        this.listaExpresiones.forEach(({ name, value }) => {
+          if (value > highestEmotion.value) {
+            highestEmotion = { name, value };
+          }
+        });
       //Va crear un liezo apenas detecte una cara
       this.crearLienzoPrevio(elementoVideo);
       this.DibujarCara(redimensionDetec, tamañoPantalla);
+      //Comparamos que la emocion sea superior al 95%
+      if (highestEmotion.value >= 0.95) {
+        console.log(`¡La emoción ${highestEmotion.name} es mayor o igual al 95%!`);
+      }
     }
     });
 

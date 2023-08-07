@@ -1,3 +1,4 @@
+<img src="../assets/Logo.png" width="300" class="logo-image" />
 <div class="wrapper">
 
   <div class="header">
@@ -11,7 +12,7 @@
       </div>
     </div>
     <div>
-      <a href="https://github.com/leifermendez" target="_blank">
+      <a href="https://github.com/Christopher20001122/FaceEmotion.git" target="_blank">
         <i class="uil uil-github"></i>
       </a>
     </div>
@@ -31,6 +32,9 @@
         <div class="block">
           <div><b>Estado de ánimo</b></div>
           <div class="block-expression">
+            <div *ngFor="let exp of listaExpresiones">
+              <span>{{exp.name}}: </span><span class="value-number">{{exp.value | number}}</span>
+            </div>
           </div>
         </div>
         <div class="block">
