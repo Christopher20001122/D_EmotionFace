@@ -2,6 +2,8 @@ import { Component,OnInit, OnDestroy, Renderer2, ElementRef } from '@angular/cor
 import { VideoService } from './video.service';
 import { FaceApiService } from './face-api.service';
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-root',
@@ -14,12 +16,15 @@ export class AppComponent implements OnInit, OnDestroy {
   listaEventos : Array<any> = [];
   sobreLienzo : any;
   listaExpresiones : any [];
-
+  EmocionAlta: { name: string, value: number } = { name: "", value: 0 };
+  EmocionAltaCapturada: { name: string, value: number,timestamp: number } | null = null;
+  
   constructor(
     private faceApiService : FaceApiService,
     private videoService: VideoService,
     private renderer2 : Renderer2,
-    private elementRef: ElementRef ){
+    private elementRef: ElementRef,
+    private router: Router ){
 
   }
 
@@ -31,7 +36,16 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.listaEventos.forEach(event => event.unsubscribe());
   }
-
+  emotionToLinkMap: { [emotion: string]: string } = {
+    'neutral': 'https://www.youtube.com/?hl=es-419',
+    'happy': 'https://www.facebook.com/',
+    'sad': 'https://enlace-emotion2.com',
+    'angry': 'https://enlace-emotion2.com',
+    'fearful': 'https://enlace-emotion2.com',
+    'disgusted': 'https://enlace-emotion2.com',
+    'surprised': 'https://academico.uce.edu.ec/aplicacion/academico/generalidades/login.jsp',
+    // Agrega más emociones y enlaces según sea necesario
+  };
   Eventos = ()=>{
     const observador1$ = this.videoService.respuestaAI
     //Cada vez que la IA consiga estos valores los emite a VideoComponent
@@ -45,24 +59,35 @@ export class AppComponent implements OnInit, OnDestroy {
       //console.log(this.listaExpresiones);   
       //console.log(expresiones);
       //capturamos el valor con la expresion más alta
-      let highestEmotion = { name: "", value: 0 };
+      let EmocionAlta = { name: "", value: 0 };
         this.listaExpresiones.forEach(({ name, value }) => {
-          if (value > highestEmotion.value) {
-            highestEmotion = { name, value };
+          if (value > EmocionAlta.value) {
+            EmocionAlta = { name, value };       
           }
         });
       //Va crear un liezo apenas detecte una cara
       this.crearLienzoPrevio(elementoVideo);
       this.DibujarCara(redimensionDetec, tamañoPantalla);
       //Comparamos que la emocion sea superior al 95%
-      if (highestEmotion.value >= 0.95) {
-        console.log(`¡La emoción ${highestEmotion.name} es mayor o igual al 95%!`);
+      const currentTime = new Date().getTime();
+      if (EmocionAlta.value >= 0.95) {
+        if (!this.EmocionAltaCapturada || currentTime - this.EmocionAltaCapturada.timestamp >= 10000) {
+          this.EmocionAltaCapturada = { ...EmocionAlta, timestamp: currentTime };
+      
+          const emotionName = EmocionAlta.name;
+          if (this.emotionToLinkMap[emotionName]) {
+            setTimeout(() => {
+              window.open(this.emotionToLinkMap[emotionName], '_blank');
+            }, 3000); // 3000 milisegundos (3 segundos)
+          }
+        }
       }
     }
     });
 
     this.listaEventos = [observador1$]
   };
+
 
   DibujarCara = (redimensionDetec, tamañoPantalla)=>{
     //Dibujamos los puntos de referencia en el cuadro 

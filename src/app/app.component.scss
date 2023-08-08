@@ -16,7 +16,7 @@ $border-color: #f1f1f1;
 
   .canvas-preview {
     position: relative;
-    top: -70px; /* Ajusta este valor según lo necesites */
+    top: -50px; /* Ajusta este valor según lo necesites */
     canvas {
       width: 100%;
     }
@@ -80,7 +80,7 @@ $border-color: #f1f1f1;
       display: flex;
       justify-content: center; /* Centra horizontalmente */
       align-items: center; /* Centra verticalmente */
-      margin-top: -80px; /* Ajusta este valor según lo necesites para mover el cuadro hacia arriba */
+      margin-top: -80px; 
       .placeholder {
         display: none;
         width: 100%;

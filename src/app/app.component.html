@@ -8,8 +8,12 @@
       </div>
 
       <div class="title">
-        Reconocimiento facial <b>ANGULAR 2021</b>
+         <b>Reconocimiento facial</b>
       </div>
+      <div *ngIf="EmocionAltaCapturada">
+        <span>Emoción capturada: </span><span class="value-number">{{EmocionAltaCapturada.name}} - {{EmocionAltaCapturada.value | percent: '1.0-0'}}</span>
+      </div>
+      
     </div>
     <div>
       <a href="https://github.com/Christopher20001122/FaceEmotion.git" target="_blank">
@@ -35,6 +39,7 @@
             <div *ngFor="let exp of listaExpresiones">
               <span>{{exp.name}}: </span><span class="value-number">{{exp.value | number}}</span>
             </div>
+
           </div>
         </div>
         <div class="block">
